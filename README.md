@@ -65,3 +65,8 @@ Remember, cryptography is a complex field, and implementing cryptographic algori
 The RSA algorithm is a widely used encryption algorithm that provides secure communication over insecure channels. This project demonstrates the implementation of RSA encryption and decryption in C#, allowing you to understand the fundamental concepts and mechanisms behind this cryptographic algorithm. However, it is essential to be aware of the limitations and potential risks associated with this implementation.
 
 Always prioritize the security of your systems and consider seeking professional advice when implementing cryptographic algorithms in production environments.
+
+## References
+https://medium.com/@ntnprdhmm/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
+<br>
+https://studyflix.de/informatik/rsa-verschlusselung-1608
