@@ -68,3 +68,11 @@ Always prioritize the security of your systems and consider seeking professional
 https://medium.com/@ntnprdhmm/how-to-generate-big-prime-numbers-miller-rabin-49e6e6af32fb
 <br>
 https://studyflix.de/informatik/rsa-verschlusselung-1608
+<br>
+https://youtu.be/oXlY-yx1oIw
+<br>
+https://youtu.be/LgAj4pGVIqI
+<br>
+https://youtu.be/QORmBQo8-j0
+<br>
+https://youtu.be/CiCffN-WCm0
