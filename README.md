@@ -59,8 +59,6 @@ It's important to consider the following points:
 5. **Cryptographic Strength**: The bit lengths used in this project (2048 bits) are considered secure for most applications. However, the security requirements may vary depending on the specific use case. It is important to consult cryptographic guidelines and standards to determine the appropriate key sizes for your application.
 6. **Algorithm Updates**: Cryptographic algorithms are subject to ongoing research and advancements. New attacks or vulnerabilities may be discovered over time. Therefore, it is important to stay informed about the latest developments and updates in the field of cryptography and update the implementation accordingly.
 
-Remember, cryptography is a complex field, and implementing cryptographic algorithms correctly requires deep expertise and careful consideration of various security aspects. If you need to use RSA encryption in a real-world application, it is strongly recommended to rely on established cryptographic libraries or consult with cryptography experts to ensure the security and integrity of your system.
-
 ## Conclusion
 The RSA algorithm is a widely used encryption algorithm that provides secure communication over insecure channels. This project demonstrates the implementation of RSA encryption and decryption in C#, allowing you to understand the fundamental concepts and mechanisms behind this cryptographic algorithm. However, it is essential to be aware of the limitations and potential risks associated with this implementation.
 
