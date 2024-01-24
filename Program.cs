@@ -8,53 +8,45 @@ namespace RSA_Algorithm
     {
         static void Main(string[] args)
         {
-            // Generiere zwei große Primzahlen p und q
+            // Primes p and q
             BigInteger p = GeneratePrimeNumber(2048);
             BigInteger q = GeneratePrimeNumber(2048);
 
-            // Berechne den RSA-Modulus n und die Eulersche Phi-Funktion phi
+            // Calc RSA-Modulus n and phi
             BigInteger n = p * q;
             BigInteger phi = (p - 1) * (q - 1);
 
-            // Generiere eine öffentliche und private Schlüsselkomponente
-            BigInteger e = GenerateCoprime(phi); // Öffentlicher Exponent
-            BigInteger d = ModInverse(e, phi); // Privater Exponent
+            BigInteger e = GenerateCoprime(phi); // Pub exp
+            BigInteger d = ModInverse(e, phi); // Priv exp
 
-            // Erstelle die öffentlichen und privaten Schlüssel als Arrays
             BigInteger[] publicKey = new BigInteger[] { e, n };
             BigInteger[] privateKey = new BigInteger[] { d, n };
 
-            // Klartextnachricht
             string message = "Hallo Welt";
 
-            // Verschlüssele die Nachricht mit dem öffentlichen Schlüssel
             BigInteger[] encryptedMessage = Encrypt(message, publicKey);
 
-            // Entschlüssele die Nachricht mit dem privaten Schlüssel
             string decryptedMessage = Decrypt(encryptedMessage, privateKey);
 
-            // Gib die verschlüsselte Nachricht aus
             Console.WriteLine("Encrypted Message:");
             foreach (BigInteger block in encryptedMessage)
             {
                 Console.WriteLine(block);
             }
 
-            // Gib die entschlüsselte Nachricht aus
             Console.WriteLine("Decrypted Message: " + decryptedMessage);
         }
 
-        // Verschlüsselungsfunktion
         static BigInteger[] Encrypt(string message, BigInteger[] publicKey)
         {
             BigInteger e = publicKey[0];
             BigInteger n = publicKey[1];
 
-            int blockSize = (int)Math.Ceiling(BigInteger.Log(n, 256)); // Blockgröße berechnen
-            int paddingSize = blockSize - 1; // Padding-Größe berechnen
+            int blockSize = (int)Math.Ceiling(BigInteger.Log(n, 256));
+            int paddingSize = blockSize - 1;
 
-            byte[] paddedMessage = Encoding.ASCII.GetBytes(message.PadRight(paddingSize, ' ')); // Nachricht padden
-            int numBlocks = (int)Math.Ceiling((double)paddedMessage.Length / paddingSize); // Anzahl der Blöcke berechnen
+            byte[] paddedMessage = Encoding.ASCII.GetBytes(message.PadRight(paddingSize, ' ')); 
+            int numBlocks = (int)Math.Ceiling((double)paddedMessage.Length / paddingSize);
 
             BigInteger[] encryptedMessage = new BigInteger[numBlocks];
 
@@ -62,37 +54,36 @@ namespace RSA_Algorithm
             {
                 byte[] block = new byte[paddingSize];
                 Array.Copy(paddedMessage, i * paddingSize, block, 0, Math.Min(paddingSize, paddedMessage.Length - i * paddingSize));
-                BigInteger numericBlock = new BigInteger(block.Reverse().ToArray()); // Byte-Array umdrehen, um die Reihenfolge beizubehalten
-                encryptedMessage[i] = BigInteger.ModPow(numericBlock, e, n); // Block verschlüsseln
+                BigInteger numericBlock = new BigInteger(block.Reverse().ToArray()); 
+                encryptedMessage[i] = BigInteger.ModPow(numericBlock, e, n); 
             }
 
             return encryptedMessage;
         }
 
-        // Entschlüsselungsfunktion
         static string Decrypt(BigInteger[] encryptedMessage, BigInteger[] privateKey)
         {
             BigInteger d = privateKey[0];
             BigInteger n = privateKey[1];
 
-            int blockSize = (int)Math.Ceiling(BigInteger.Log(n, 256)); // Blockgröße berechnen
-            int paddingSize = blockSize - 1; // Padding-Größe berechnen
+            int blockSize = (int)Math.Ceiling(BigInteger.Log(n, 256)); 
+            int paddingSize = blockSize - 1;
 
             byte[] decryptedBytes = new byte[encryptedMessage.Length * paddingSize];
 
             for (int i = 0; i < encryptedMessage.Length; i++)
             {
-                BigInteger numericBlock = BigInteger.ModPow(encryptedMessage[i], d, n); // Block entschlüsseln
+                BigInteger numericBlock = BigInteger.ModPow(encryptedMessage[i], d, n); 
                 byte[] blockBytes = numericBlock.ToByteArray();
-                Array.Reverse(blockBytes); // Byte-Array umdrehen, um die Reihenfolge wiederherzustellen
+                Array.Reverse(blockBytes); 
                 Array.Copy(blockBytes, 0, decryptedBytes, i * paddingSize, Math.Min(paddingSize, blockBytes.Length));
             }
 
-            string decryptedMessage = Encoding.ASCII.GetString(decryptedBytes).TrimEnd(); // Entschlüsselte Bytes in einen String umwandeln
+            string decryptedMessage = Encoding.ASCII.GetString(decryptedBytes).TrimEnd();
             return decryptedMessage;
         }
 
-        // Berechnet das multiplikative Inverse a^-1 mod m
+        // Inverse a^-1 mod m
         static BigInteger ModInverse(BigInteger a, BigInteger m)
         {
             BigInteger m0 = m;
@@ -120,7 +111,7 @@ namespace RSA_Algorithm
             return x;
         }
 
-        // Generiert eine zufällige Zahl, die zu n koprim ist
+        // generate num that is koprim to n
         static BigInteger GenerateCoprime(BigInteger n)
         {
             BigInteger coprime = 0;
@@ -135,16 +126,13 @@ namespace RSA_Algorithm
             return coprime;
         }
 
-        // Überprüft, ob eine Zahl wahrscheinlich prim ist
         static bool IsPrime(BigInteger n, int k = 128)
         {
-            // Test, ob n ungerade ist. Aber Vorsicht, 2 ist eine Primzahl!
             if (n == 2 || n == 3)
                 return true;
             if (n <= 1 || n % 2 == 0)
                 return false;
 
-            // Finde r und s
             int s = 0;
             BigInteger r = n - 1;
             while (r % 2 == 0)
@@ -153,7 +141,6 @@ namespace RSA_Algorithm
                 r /= 2;
             }
 
-            // Führe k Tests durch
             for (int i = 0; i < k; i++)
             {
                 RandomNumberGenerator rng = RandomNumberGenerator.Create();
@@ -184,7 +171,6 @@ namespace RSA_Algorithm
             return true;
         }
 
-        // Generiert eine Primzahl mit der angegebenen Bitlänge
         static BigInteger GeneratePrimeNumber(int bitLength)
         {
             BigInteger p;
@@ -197,23 +183,20 @@ namespace RSA_Algorithm
             return p;
         }
 
-        // Generiert eine zufällige BigInteger mit der angegebenen Bitlänge
         static BigInteger GenerateRandomBigInteger(int bitLength)
         {
             byte[] bytes = new byte[bitLength / 8];
             using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(bytes);
-                bytes[bytes.Length - 1] &= (byte)0x7F; // Stellt sicher, dass die Zahl positiv ist
+                bytes[bytes.Length - 1] &= (byte)0x7F; 
             }
             return new BigInteger(bytes);
         }
     }
 
-    // Erweiterungsmethoden für BigInteger
     static class BigIntegerExtensions
     {
-        // Gibt die nächste Primzahl zurück, die größer oder gleich dem angegebenen Wert ist
         public static BigInteger NextPrime(BigInteger start)
         {
             BigInteger prime = start;
@@ -225,7 +208,6 @@ namespace RSA_Algorithm
             }
         }
 
-        // Überprüft, ob eine Zahl wahrscheinlich prim ist
         private static bool IsPrime(BigInteger n)
         {
             if (n == 2 || n == 3)
@@ -242,7 +224,7 @@ namespace RSA_Algorithm
                 s++;
             }
 
-            for (int i = 0; i < 128; i++) // Führe 128 Tests durch
+            for (int i = 0; i < 128; i++)
             {
                 BigInteger a = RandomBigInteger(2, n - 2);
                 BigInteger x = BigInteger.ModPow(a, d, n);
@@ -270,14 +252,13 @@ namespace RSA_Algorithm
             return true;
         }
 
-        // Generiert eine zufällige BigInteger im Bereich [min, max)
         private static BigInteger RandomBigInteger(BigInteger min, BigInteger max)
         {
             byte[] bytes = max.ToByteArray();
             using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(bytes);
-                bytes[bytes.Length - 1] &= (byte)0x7F; // Stellt sicher, dass die Zahl positiv ist
+                bytes[bytes.Length - 1] &= (byte)0x7F;
             }
             return new BigInteger(bytes) % (max - min) + min;
         }
